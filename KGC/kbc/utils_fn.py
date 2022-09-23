@@ -28,7 +28,7 @@ def evaluate(args, eval_dataset, model, tokenizer, global_step=None, file_prefix
     rel_list = list(sorted(eval_dataset.rel_list))
     all_tail_ents = []
     for triplet in sample_raw_examples:
-        _, _, _tail = triplet
+        _,_,_tail = triplet
         all_tail_ents.append(_tail)
         all_tail_ents.extend(dev_dict[triplet]["tails_corrupt"])
     all_tail_ents = list(set(all_tail_ents))  # 2612
@@ -109,6 +109,7 @@ def evaluate(args, eval_dataset, model, tokenizer, global_step=None, file_prefix
         ent2emb[_tail] = emb_mat[ptr_row]
         ptr_row += 1
 
+
     # ---------------------------- use HIT@10 as metric -----------------------------
     ranks_left, ranks_right, ranks = [], [], []
     hits_left, hits_right, hits = [], [], []
@@ -148,8 +149,8 @@ def evaluate(args, eval_dataset, model, tokenizer, global_step=None, file_prefix
         local_scores_list = []
         sim_batch_size = args.eval_batch_size * 8
         for _idx_r in range(0, all_rep_src.shape[0], sim_batch_size):
-            _rep_src, _rep_tgt = all_rep_src[_idx_r: _idx_r +
-                                             sim_batch_size], all_rep_tgt[_idx_r: _idx_r + sim_batch_size]
+            _rep_src, _rep_tgt = all_rep_src[_idx_r: _idx_r + sim_batch_size], all_rep_tgt[
+                                                                               _idx_r: _idx_r + sim_batch_size]
             with torch.no_grad():
                 logits = model.classifier(_rep_src, _rep_tgt)
                 logits = torch.softmax(logits, dim=-1)
@@ -219,7 +220,6 @@ def evaluate(args, eval_dataset, model, tokenizer, global_step=None, file_prefix
         writer.write("\n")
     return np.mean(hits[9])
 
-
 def train(args, train_dataset, model, tokenizer, eval_dataset=None, eval_fn=evaluate):
     eval_fn = eval_fn
     """ Train the model """
@@ -227,9 +227,6 @@ def train(args, train_dataset, model, tokenizer, eval_dataset=None, eval_fn=eval
         tb_writer = SummaryWriter(log_dir=os.path.join(args.output_dir, "tensorboard"))
 
     # learning setup
-
-
-    """need to add relation_ids to calculate hyperbolic distance for each relation"""
     train_dataloader = setup_training_step(
         args, train_dataset, collate_fn=train_dataset.data_collate_fn, num_workers=args.num_workers)
 
@@ -237,6 +234,7 @@ def train(args, train_dataset, model, tokenizer, eval_dataset=None, eval_fn=eval
     model, optimizer, scheduler = setup_opt(args, model)
     metric_best = -1e5
     global_step = 0
+
 
     ma_dict = MovingAverageDict()
     model.zero_grad()
@@ -276,29 +274,16 @@ def train(args, train_dataset, model, tokenizer, eval_dataset=None, eval_fn=eval
                     save_model_with_default_name(args.output_dir, model, tokenizer, args)
 
                 if args.local_rank in [-1, 0] and eval_dataset is not None \
-                        and args.eval_steps > 0 and global_step % args.eval_steps == 0:
+                        and args.eval_steps > 0 and global_step % args.eval_steps == 0 :
                     metric_cur = eval_fn(
                         args, eval_dataset, model, tokenizer, global_step=global_step, file_prefix="eval_")
                     if metric_cur > metric_best:
                         save_model_with_default_name(args.output_dir, model, tokenizer, args)
                         metric_best = metric_cur
-            
-            # can add epoch evaluation
-            dataset_list = [train_dataset, dev_dataset, test_dataset]
-            if args.dataset == "NELL_standard":
-                predict_NELL(args, test_dataset.raw_examples, dataset_list, model, verbose=True)
-            else:
-                tuple_ranks = predict(
-                    args, test_dataset.raw_examples, dataset_list, model, verbose=True)
-                output_str = calculate_metrics_for_link_prediction(tuple_ranks, verbose=True)
-                save_json(tuple_ranks, join(args.output_dir, "tuple_ranks.json"))
-                with open(join(args.output_dir, "epoch_link_prediction_metrics.txt"), "w", encoding="utf-8") as fp:
-                    fp.write(output_str)
-            
             if args.max_steps > 0 and global_step > args.max_steps:
                 epoch_iterator.close()
                 break
-
+        # can add epoch evaluation
         if args.max_steps > 0 and global_step > args.max_steps:
             train_iterator.close()
             break

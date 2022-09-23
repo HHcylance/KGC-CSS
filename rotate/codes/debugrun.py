@@ -28,12 +28,12 @@ def parse_args(args=None):
     )
 
     parser.add_argument('--cuda', action='store_false', help='use GPU')  #
-    # parser.add_argument('--do_train', action='store_false')
-    # parser.add_argument('--do_valid', action='store_false')
-    # parser.add_argument('--do_test', action='store_false')
-    parser.add_argument('--do_train', action='store_true')
-    parser.add_argument('--do_valid', action='store_true')
-    parser.add_argument('--do_test', action='store_true')
+    parser.add_argument('--do_train', action='store_false')
+    parser.add_argument('--do_valid', action='store_false')
+    parser.add_argument('--do_test', action='store_false')
+    # parser.add_argument('--do_train', action='store_true')
+    # parser.add_argument('--do_valid', action='store_true')
+    # parser.add_argument('--do_test', action='store_true')
     parser.add_argument('--do_case', action='store_true')
     parser.add_argument('--rel_do_test', action='store_true')
     parser.add_argument('--fire_test', action='store_true')

@@ -5,7 +5,7 @@ import os
 import random
 import torch
 from os.path import join
-from peach.common import file_exists, dir_exists, save_json, load_json, StAR_FILE_PATH
+from peach.common import file_exists, dir_exists, save_json, load_json, FILE_PATH
 from tqdm import tqdm
 from transformers import BertConfig, BertTokenizer, RobertaConfig, RobertaTokenizer
 from kbc.kb_dataset import KbDataset
@@ -750,23 +750,23 @@ def main():
     neg_weights = [1., 1., 0.] if args.neg_weights is None else [float(_e) for _e in args.neg_weights.split(",")]
     assert len(neg_weights) == 3 and sum(neg_weights) > 0
 
-    if StAR_FILE_PATH is None:
-        print("Please replace StAR_FILE_PATH in ./StAR/peach/common.py with your own path to run the code.")
+    if FILE_PATH is None:
+        print("Please replace FILE_PATH in ./KGC/peach/common.py with your own path to run the code.")
         return
     
     train_dataset = DatasetForPairwiseRankingLP(
-        args.dataset, "train", None, StAR_FILE_PATH+"/StAR/data/",
+        args.dataset, "train", None, FILE_PATH+"/KGC/data/",
         args.model_class, tokenizer, args.do_lower_case,
         args.max_seq_length,  neg_times=5 ,neg_weights=neg_weights,
         type_cons_neg_sample=args.type_cons_neg_sample, type_cons_ratio=args.type_cons_ratio
     )
     dev_dataset = DatasetForPairwiseRankingLP(
-        args.dataset, "dev", None, StAR_FILE_PATH+"/StAR/data/",
+        args.dataset, "dev", None, FILE_PATH+"/KGC/data/",
         args.model_class, tokenizer, args.do_lower_case,
         args.max_seq_length,
     )
     test_dataset = DatasetForPairwiseRankingLP(
-        args.dataset, "test", None, StAR_FILE_PATH+"/StAR/data/",
+        args.dataset, "test", None, FILE_PATH+"/KGC/data/",
         args.model_class, tokenizer, args.do_lower_case,
         args.max_seq_length,
     )

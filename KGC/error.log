@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "run_link_prediction.py", line 4, in <module>
+    main()
+  File "/mnt/publicStoreA/hubinhao/StAR_KGC/KGC/link_prediction/train.py", line 950, in main
+    train(args, train_dataset, model, tokenizer, eval_dataset=dev_dataset, eval_fn=evaluate_pairwise_ranking)
+  File "/mnt/publicStoreA/hubinhao/StAR_KGC/KGC/kbc/utils_fn.py", line 253, in train
+    outputs = model(**inputs)
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/modules/module.py", line 550, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 155, in forward
+    outputs = self.parallel_apply(replicas, inputs, kwargs)
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 165, in parallel_apply
+    return parallel_apply(replicas, inputs, kwargs, self.device_ids[:len(replicas)])
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/parallel/parallel_apply.py", line 85, in parallel_apply
+    output.reraise()
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/_utils.py", line 395, in reraise
+    raise self.exc_type(msg)
+StopIteration: Caught StopIteration in replica 0 on device 0.
+Original Traceback (most recent call last):
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/parallel/parallel_apply.py", line 60, in _worker
+    output = module(*input, **kwargs)
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/modules/module.py", line 550, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/mnt/publicStoreA/hubinhao/StAR_KGC/KGC/kbc/models.py", line 425, in forward
+    rep_src = self.encoder(src_input_ids, attention_mask=src_attention_mask, token_type_ids=src_token_type_ids)
+  File "/mnt/publicStoreA/hubinhao/StAR_KGC/KGC/kbc/models.py", line 404, in encoder
+    position_ids=position_ids)
+  File "/mnt/publicStoreA/hubinhao/anaconda3/envs/torch1.5/lib/python3.7/site-packages/torch/nn/modules/module.py", line 550, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/mnt/publicStoreA/hubinhao/StAR_KGC/KGC/transformers/modeling_bert.py", line 696, in forward
+    extended_attention_mask = extended_attention_mask.to(dtype=next(self.parameters()).dtype)  # fp16 compatibility
+StopIteration

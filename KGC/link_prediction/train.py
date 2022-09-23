@@ -618,6 +618,7 @@ def evaluate_pairwise_ranking(args, eval_dataset, model, tokenizer, global_step=
 
     logging.info("***** Running evaluation at {}*****".format(global_step))
     logging.info("  Num examples = %d", len(eval_dataset))
+    model = model.module
     model.eval()
 
     # get data
@@ -920,6 +921,8 @@ def main():
 
     if args.local_rank == 0:
         torch.distributed.barrier()  # Make sure only the first process in distributed training will download model & vocab
+    if isinstance(model, torch.nn.DataParallel):
+        model = model.module
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
 

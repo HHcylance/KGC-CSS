@@ -12,8 +12,8 @@ CUDA_VISIBLE_DEVICES=2 python ./ensemble/run.py \
 --save_steps 2000 \
 --eval_steps -1 \
 --warmup_proportion 0 \
---output_dir ./StAR/result/WN18RR_roberta-large_ensemble  \
---dataset_dir ./StAR_KGC-master/StAR/result/WN18RR_roberta-large \
---context_score_path ./StAR/result/WN18RR_roberta-large \
+--output_dir result/WN18RR_roberta-large_ensemble  \
+--dataset_dir result/WN18RR_roberta-large \
+--context_score_path result/WN18RR_roberta-large \
 --translation_score_path ../rotate/models/RotatE_wn18rr_0  \
 --seed 42 

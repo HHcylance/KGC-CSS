@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from ensemble.ensemble_model import EnsembleModel
 from ensemble.ensemble_dataset import EnsembleDataset, KbDataset
 from peach.help import *
-from peach.common import StAR_FILE_PATH
+from peach.common import FILE_PATH
 
 
 def get_optimizer(args, model):
@@ -63,15 +63,15 @@ def main():
 
 
     # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=300, gamma=0.1)
-    if StAR_FILE_PATH is None:
-        print("Please replace StAR_FILE_PATH in ./StAR/peach/common.py with your own path to run the code.")
+    if FILE_PATH is None:
+        print("Please replace FILE_PATH in ./KGC/peach/common.py with your own path to run the code.")
         return
     kb_train_dataset = KbDataset(
-        args.dataset, "train", None, StAR_FILE_PATH+"/StAR/data/")
+        args.dataset, "train", None, FILE_PATH+"KGC/data/")
     kb_dev_dataset = KbDataset(
-        args.dataset, "dev", None, StAR_FILE_PATH+"/StAR/data/")
+        args.dataset, "dev", None, FILE_PATH+"KGC/data/")
     kb_test_dataset = KbDataset(
-        args.dataset, "test", None, StAR_FILE_PATH+"/StAR/data/")
+        args.dataset, "test", None, FILE_PATH+"KGC/data/")
     kb_dataset_list = [kb_train_dataset, kb_dev_dataset, kb_test_dataset]
 
     # get_g

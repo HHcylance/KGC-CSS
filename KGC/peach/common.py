@@ -4,7 +4,7 @@ import os
 import csv
 import sys
 
-StAR_FILE_PATH = None  # Your own file path
+FILE_PATH = '/home/hubinhao/store/KGC/'  # Your own file path
 
 def _truncate_seq_pair(tokens_a, tokens_b, max_length):
     """Truncates a sequence pair in place to the maximum length."""
